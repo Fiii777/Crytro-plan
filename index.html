@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Trade Plan</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #111; color: #eee; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+    th { background: #222; }
+    input { width: 80px; }
+    .green { color: limegreen; }
+    .red { color: tomato; }
+  </style>
+</head>
+<body>
+  <h2>แผนเทรดคริปโต</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ระดับ</th>
+        <th>ราคาซื้อ</th>
+        <th>จำนวน</th>
+        <th>เงินลงทุน</th>
+      </tr>
+    </thead>
+    <tbody id="buy-plan">
+      <!-- Buy rows will go here -->
+    </tbody>
+  </table>
+
+  <button onclick="calculate()">คำนวณ</button>
+
+  <h3>ผลลัพธ์</h3>
+  <p>ราคาซื้อเฉลี่ย: <span id="avg-price"></span></p>
+  <p>รวมเงินลงทุน: <span id="total-invest"></span></p>
+
+  <script>
+    const buyLevels = 5;
+    const buyTable = document.getElementById("buy-plan");
+
+    for (let i = 0; i < buyLevels; i++) {
+      const row = buyTable.insertRow();
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td><input type="number" id="price${i}" placeholder="เช่น 89000"></td>
+        <td><input type="number" id="amount${i}" placeholder="เช่น 0.001"></td>
+        <td id="invest${i}">-</td>
+      `;
+    }
+
+    function calculate() {
+      let totalInvest = 0;
+      let totalCoin = 0;
+
+      for (let i = 0; i < buyLevels; i++) {
+        const price = parseFloat(document.getElementById(`price${i}`).value) || 0;
+        const amount = parseFloat(document.getElementById(`amount${i}`).value) || 0;
+        const invest = price * amount;
+        document.getElementById(`invest${i}`).textContent = invest.toFixed(2);
+        totalInvest += invest;
+        totalCoin += amount;
+      }
+
+      const avgPrice = totalInvest / totalCoin || 0;
+      document.getElementById("avg-price").textContent = avgPrice.toFixed(2);
+      document.getElementById("total-invest").textContent = totalInvest.toFixed(2);
+    }
+  </script>
+</body>
+</html>
